@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Film5</string>
+
+    <string name="title">Title</string>
+    <string name="title_dummy">Lorem ipsum dolor sit amet</string>
+    <string name="name">Name</string>
+    <string name="movie">Movie</string>
+    <string name="tv">Tv Show</string>
+    <string name="release_date">Release Date</string>
+    <string name="release_date_dummy">2999-99-99</string>
+    <string name="first_air_date">First Air Date</string>
+    <string name="first_air_date_dummy">2999-99-99</string>
+    <string name="overview">Overview</string>
+    <string name="process">Process</string>
+    <string name="overview_dummy">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed eros ut metus finibus efficitur at sit amet libero. Donec convallis diam mi, id efficitur nisl vestibulum mollis. Sed ut massa facilisis massa bibendum ultrices. Suspendisse potenti. Nulla mollis luctus auctor. Donec non lacinia nisi. Nunc magna diam, faucibus vitae consequat et, fermentum a massa. Aliquam pretium scelerisque felis eget ultrices. Fusce eu accumsan turpis. Cras facilisis metus ultrices arcu posuere gravida. Sed ac ante in odio placerat porta in vel neque. Nam consectetur dolor arcu, sed pretium nulla maximus in. Maecenas tellus purus, dignissim nec dolor luctus, fermentum vehicula tortor. Sed et enim libero.</string>
+    <string name="score">Score</string>
+    <string name="score_dummy">100</string>
+    <string name="movie_title">Movie Title</string>
+    <string name="movie_description">Movie Description</string>
+    <string name="tv_title">Tv Title</string>
+    <string name="tv_description">Tv Description</string>
+    <string name="change_settings">Change Setting</string>
+    <string name="favorite">Favorite</string>
+    <string name="unfavorite">Un-Favorite</string>
+    <string name="lang">en-US</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
