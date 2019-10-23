@@ -24,6 +24,7 @@
     <string name="favorite">Favorit</string>
     <string name="unfavorite">Un-Favorit</string>
     <string name="lang">id-ID</string>
+    <string name="search_hint">Cari</string>
 
     <string name="hello_blank_fragment">Fragment Kosong</string>
 </resources>

@@ -75,6 +75,10 @@ public class TVAdapter extends RecyclerView.Adapter<TVAdapter.ViewHolder>{
         });
     }
 
+    public void _notifyItemRangeRemoved(int i,int size){
+        notifyItemRangeRemoved(i,size);
+    }
+
     @Override
     public int getItemCount() {
         return this.tvs.size();

@@ -75,6 +75,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         });
     }
 
+    public void _notifyItemRangeRemoved(int i,int size){
+        notifyItemRangeRemoved(i,size);
+    }
+
     @Override
     public int getItemCount() {
         return this.movies.size();

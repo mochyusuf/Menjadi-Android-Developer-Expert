@@ -10,7 +10,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String" , "API_KEY" , "\"b650046bf640e7bf7054093854b8d02a\"")
-        buildConfigField("String" , "API_URL" , "\"https://api.themoviedb.org/3/discover/\"")
+        buildConfigField("String" , "API_URL" , "\"https://api.themoviedb.org/3/\"")
         buildConfigField("String" , "API_IMAGE" , "\"https://image.tmdb.org/t/p/w500/\"")
     }
     buildTypes {

@@ -7,15 +7,29 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface APIService {
-    @GET("movie")
+    @GET("discover/movie")
     Call<ListMovieModel> get_movies(
                 @Query("api_key") String api_key,
                 @Query("language") String language
         );
 
-    @GET("tv")
+    @GET("discover/tv")
     Call<ListTVModel> get_tvs(
             @Query("api_key") String api_key,
             @Query("language") String language
+    );
+
+    @GET("search/movie")
+    Call<ListMovieModel> search_movies(
+            @Query("api_key") String api_key,
+            @Query("language") String language,
+            @Query("query") String query
+    );
+
+    @GET("search/tv")
+    Call<ListTVModel> search_tvs(
+            @Query("api_key") String api_key,
+            @Query("language") String language,
+            @Query("query") String query
     );
 }
