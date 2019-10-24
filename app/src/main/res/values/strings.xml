@@ -24,6 +24,8 @@
     <string name="unfavorite">Un-Favorite</string>
     <string name="lang">en-US</string>
     <string name="search_hint">Search</string>
+    <string name="appwidget_text">Movie Banner</string>
+    <string name="empty_text">No Data</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -25,6 +25,8 @@
     <string name="unfavorite">Un-Favorit</string>
     <string name="lang">id-ID</string>
     <string name="search_hint">Cari</string>
+    <string name="appwidget_text">Film Banner</string>
+    <string name="empty_text">Data Kosong</string>
 
     <string name="hello_blank_fragment">Fragment Kosong</string>
 </resources>
