@@ -29,4 +29,13 @@
     <string name="empty_text">Data Kosong</string>
 
     <string name="hello_blank_fragment">Fragment Kosong</string>
+    <string name="language_title">Lokalisasi</string>
+    <string name="notifications_title">Notifikasi</string>
+    <string name="summary_daily_reminder">Aktifkan/matikan pegingat harian. Anda akan menerima pengingat harian pada pukul 8 pagi</string>
+    <string name="summary_release_reminder">Aktifkan/matikan pengingat film baru. Anda akan menerima pengingat harian film yang baru tayang pada pukul 7 pagi</string>
+    <string name="message_daily">Buka aplikasi untuk melihat info film terbaru</string>
+    <string name="release_movie_message">%s telah tayang hari ini!</string>
+    <string name="on_movie_release_reminder">Aktifkan pengingat harian film</string>
+    <string name="off_movie_release_reminder">Nonaktifkan pengingat harian film</string>
+    <string name="daily_reminder">Pengingat Harian</string>
 </resources>

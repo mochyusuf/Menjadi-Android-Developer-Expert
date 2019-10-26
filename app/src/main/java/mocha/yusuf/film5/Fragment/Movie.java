@@ -27,6 +27,7 @@ import java.util.Locale;
 
 import mocha.yusuf.film5.API.APIService;
 import mocha.yusuf.film5.API.APIUrl;
+import mocha.yusuf.film5.Activity.Setting;
 import mocha.yusuf.film5.Adapter.MovieAdapter;
 import mocha.yusuf.film5.BuildConfig;
 import mocha.yusuf.film5.Model.ListMovieModel;
@@ -147,7 +148,7 @@ public class Movie extends Fragment {
         int id = item.getItemId();
 
         if (id == R.id.action_change) {
-            Intent mIntent = new Intent(Settings.ACTION_LOCALE_SETTINGS);
+            Intent mIntent = new Intent(getActivity(), Setting.class);
             startActivity(mIntent);
             return true;
         }

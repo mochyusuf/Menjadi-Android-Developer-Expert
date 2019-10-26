@@ -13,16 +13,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/MyMaterialTheme.Base">
-        <activity android:name=".Activity.DetailTV"/>
-        <activity android:name=".Activity.DetailMovie"/>
+        <activity android:name=".Activity.Setting"></activity>
+        <activity android:name=".Activity.DetailTV" />
+        <activity android:name=".Activity.DetailMovie" />
         <activity android:name=".Activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <receiver android:name="mocha.yusuf.film5.Widget.ImagesBannerWidget">
+        <receiver
+            android:name=".Notifications.DailyReceiver"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name=".Notifications.MovieReceiver"
+            android:enabled="true"
+            android:exported="false" />
+			
+        <receiver android:name=".Widget.ImagesBannerWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -33,7 +44,7 @@
         </receiver>
 
         <service
-            android:name="mocha.yusuf.film5.Widget.StackWidgetService"
+            android:name=".Widget.StackWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
