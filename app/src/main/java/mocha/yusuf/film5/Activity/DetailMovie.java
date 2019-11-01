@@ -1,38 +1,41 @@
 package mocha.yusuf.film5.Activity;
 
-import android.arch.persistence.room.Room;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
 import mocha.yusuf.film5.BuildConfig;
-import mocha.yusuf.film5.Database.AppDatabase;
+import mocha.yusuf.film5.Database.MovieContract;
 import mocha.yusuf.film5.Model.MovieModel;
 import mocha.yusuf.film5.R;
 
 public class DetailMovie extends AppCompatActivity {
 
     public static final String EXTRA_MOVIE = "extra_movie";
+    public static final String TAG = "DetailMovie_TAG";
     public static final String DB_NAME = "favorit";
-    private static AppDatabase db;
     private static MovieModel movie;
+    private boolean isfavorite;
+    private String id_movie;
     private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_movie);
-
-        db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, DB_NAME).build();
 
         movie = getIntent().getParcelableExtra(EXTRA_MOVIE);
         TextView movie_title = findViewById(R.id.movie_title);
@@ -43,6 +46,8 @@ public class DetailMovie extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        this.id_movie = String.valueOf(movie.getId());
 
         movie_title.setText(movie.getTitle());
         Glide.with(this)
@@ -59,8 +64,18 @@ public class DetailMovie extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.favorite, menu);
         this.menu = menu;
-        new checkFavoriteMovie().execute();
+        if (!isFavorite(this.id_movie)){
+            menu.findItem(R.id.action_un_favorite).setVisible(false);
+        }else{
+            menu.findItem(R.id.action_favorite).setVisible(false);
+        }
         return true;
+    }
+
+    private boolean isFavorite(String id) {
+        Uri uri = MovieContract.CONTENT_URI.buildUpon().appendPath(id).build();
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        return cursor.moveToFirst();
     }
 
     @Override
@@ -68,64 +83,33 @@ public class DetailMovie extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_favorite) {
-            insertFavoriteMovie();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(MovieContract.MovieColumns.MOVIE_id, id);
+            contentValues.put(MovieContract.MovieColumns.MOVIE_title, movie.getTitle());
+            contentValues.put(MovieContract.MovieColumns.MOVIE_popularity, movie.getPopularity());
+            contentValues.put(MovieContract.MovieColumns.MOVIE_vote_count, movie.getVote_count());
+            contentValues.put(MovieContract.MovieColumns.MOVIE_poster_path, movie.getPoster_path());
+            contentValues.put(MovieContract.MovieColumns.MOVIE_backdrop_path, movie.getBackdrop_path());
+            contentValues.put(MovieContract.MovieColumns.MOVIE_original_language, movie.getOriginal_language());
+            contentValues.put(MovieContract.MovieColumns.MOVIE_original_title, movie.getOriginal_language());
+            contentValues.put(MovieContract.MovieColumns.MOVIE_vote_average, movie.getVote_average());
+            contentValues.put(MovieContract.MovieColumns.MOVIE_overview, movie.getOverview());
+            contentValues.put(MovieContract.MovieColumns.MOVIE_release_date, movie.getRelease_date());
+            Uri uri = getContentResolver().insert(MovieContract.CONTENT_URI, contentValues);
+            if (uri != null) {
+                Log.i(TAG, "Uri " + uri);
+            }
+            menu.findItem(R.id.action_favorite).setVisible(false);
+            menu.findItem(R.id.action_un_favorite).setVisible(true);
             return true;
         }else if(id == R.id.action_un_favorite){
-            deleteFavoriteMovie();
+            Uri uri = MovieContract.CONTENT_URI.buildUpon().appendPath(this.id_movie).build();
+            getContentResolver().delete(uri, null, null);
+            menu.findItem(R.id.action_favorite).setVisible(true);
+            menu.findItem(R.id.action_un_favorite).setVisible(false);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void insertFavoriteMovie(){
-        new saveFavoriteMovie().execute();
-    }
-
-    private void deleteFavoriteMovie(){
-        new deleteFavoriteMovie().execute();
-    }
-
-    class saveFavoriteMovie extends AsyncTask<Void, Void, Long> {
-        @Override
-        protected Long doInBackground(Void... voids) {
-            return db.movieDao().insertMovie(movie);
-        }
-
-        @Override
-        protected void onPostExecute(Long status) {
-            menu.findItem(R.id.action_favorite).setVisible(false);
-            menu.findItem(R.id.action_un_favorite).setVisible(true);
-        }
-    }
-
-    class deleteFavoriteMovie extends AsyncTask<Void, Void, Integer> {
-        @Override
-        protected Integer doInBackground(Void... voids) {
-            return db.movieDao().deleteMovie(movie);
-        }
-
-        @Override
-        protected void onPostExecute(Integer status) {
-            menu.findItem(R.id.action_favorite).setVisible(true);
-            menu.findItem(R.id.action_un_favorite).setVisible(false);
-        }
-    }
-
-    class checkFavoriteMovie extends AsyncTask<Void, Void, MovieModel> {
-
-        @Override
-        protected MovieModel doInBackground(Void... voids) {
-            return db.movieDao().checkMovies(movie.getId());
-        }
-
-        @Override
-        protected void onPostExecute(MovieModel movie) {
-            if (movie == null){
-                menu.findItem(R.id.action_un_favorite).setVisible(false);
-            }else{
-                menu.findItem(R.id.action_favorite).setVisible(false);
-            }
-        }
     }
 }

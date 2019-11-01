@@ -1,13 +1,17 @@
 package mocha.yusuf.film5.Model;
 
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-@Entity(tableName = "TVs")
+import mocha.yusuf.film5.Database.TVContract;
+
+import static mocha.yusuf.film5.Database.TVContract.getColumnDouble;
+import static mocha.yusuf.film5.Database.TVContract.getColumnInt;
+import static mocha.yusuf.film5.Database.TVContract.getColumnString;
+
 public class TVModel implements Parcelable {
     @SerializedName("original_name")
     private String original_name;
@@ -30,9 +34,8 @@ public class TVModel implements Parcelable {
     @SerializedName("original_language")
     private String original_language;
 
-    @PrimaryKey
     @SerializedName("id")
-    private int id;
+    private String id;
 
     @SerializedName("vote_average")
     private double vote_average;
@@ -43,7 +46,7 @@ public class TVModel implements Parcelable {
     @SerializedName("poster_path")
     private String poster_path;
 
-    public TVModel(String original_name, String name, double popularity, int vote_count, String first_air_date, String backdrop_path, String original_language, int id, double vote_average, String overview, String poster_path) {
+    public TVModel(String original_name, String name, double popularity, int vote_count, String first_air_date, String backdrop_path, String original_language, String id, double vote_average, String overview, String poster_path) {
         this.original_name = original_name;
         this.name = name;
         this.popularity = popularity;
@@ -113,11 +116,11 @@ public class TVModel implements Parcelable {
         this.original_language = original_language;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -159,7 +162,7 @@ public class TVModel implements Parcelable {
         dest.writeString(this.first_air_date);
         dest.writeString(this.backdrop_path);
         dest.writeString(this.original_language);
-        dest.writeInt(this.id);
+        dest.writeString(this.id);
         dest.writeDouble(this.vote_average);
         dest.writeString(this.overview);
         dest.writeString(this.poster_path);
@@ -173,7 +176,7 @@ public class TVModel implements Parcelable {
         this.first_air_date = in.readString();
         this.backdrop_path = in.readString();
         this.original_language = in.readString();
-        this.id = in.readInt();
+        this.id = in.readString();
         this.vote_average = in.readDouble();
         this.overview = in.readString();
         this.poster_path = in.readString();
@@ -190,4 +193,19 @@ public class TVModel implements Parcelable {
             return new TVModel[size];
         }
     };
+
+    public TVModel (Cursor cursor) {
+        this.id = getColumnString(cursor, TVContract.TVColumns.TV_id);
+        this.original_name = getColumnString(cursor, TVContract.TVColumns.TV_original_name);
+        this.name = getColumnString(cursor, TVContract.TVColumns.TV_name);
+        this.popularity = getColumnInt(cursor, TVContract.TVColumns.TV_popularity);
+        this.vote_count = getColumnInt(cursor, TVContract.TVColumns.TV_vote_count);
+        this.backdrop_path = getColumnString(cursor, TVContract.TVColumns.TV_first_air_date);
+        this.backdrop_path = getColumnString(cursor, TVContract.TVColumns.TV_backdrop_path);
+        this.original_language = getColumnString(cursor, TVContract.TVColumns.TV_original_language);
+        this.vote_average = getColumnDouble(cursor, TVContract.TVColumns.TV_vote_average);
+        this.overview = getColumnString(cursor, TVContract.TVColumns.TV_overview);
+        this.poster_path = getColumnString(cursor, TVContract.TVColumns.TV_poster_path);
+
+    }
 }

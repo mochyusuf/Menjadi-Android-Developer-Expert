@@ -1,2 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="title">Judul</string>
+    <string name="title_dummy">Lorem ipsum dolor sit amet</string>
+    <string name="name">Nama</string>
+    <string name="movie">Film</string>
+    <string name="tv">Tayangan TV</string>
+    <string name="release_date">Tanggal Rilis</string>
+    <string name="release_date_dummy">2999-99-99</string>
+    <string name="first_air_date">Tayang perdana</string>
+    <string name="first_air_date_dummy">2999-99-99</string>
+    <string name="overview">Ringkasan</string>
+    <string name="process">Proses</string>
+    <string name="overview_dummy">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed eros ut metus finibus efficitur at sit amet libero. Donec convallis diam mi, id efficitur nisl vestibulum mollis. Sed ut massa facilisis massa bibendum ultrices. Suspendisse potenti. Nulla mollis luctus auctor. Donec non lacinia nisi. Nunc magna diam, faucibus vitae consequat et, fermentum a massa. Aliquam pretium scelerisque felis eget ultrices. Fusce eu accumsan turpis. Cras facilisis metus ultrices arcu posuere gravida. Sed ac ante in odio placerat porta in vel neque. Nam consectetur dolor arcu, sed pretium nulla maximus in. Maecenas tellus purus, dignissim nec dolor luctus, fermentum vehicula tortor. Sed et enim libero.</string>
+    <string name="score">Skor</string>
+    <string name="score_dummy">100</string>
+    <string name="movie_title">Judul Film</string>
+    <string name="movie_description">Deskripsi Film</string>
+    <string name="tv_title">Judul Tv</string>
+    <string name="tv_description">Deskripsi Tv</string>
+    <string name="change_settings">Ubah Pengaturan</string>
+    <string name="favorite">Favorit</string>
+    <string name="unfavorite">Un-Favorit</string>
+    <string name="lang">id-ID</string>
+    <string name="search_hint">Cari</string>
+    <string name="appwidget_text">Film Banner</string>
+    <string name="empty_text">Data Kosong</string>
+
+    <string name="hello_blank_fragment">Fragment Kosong</string>
+    <string name="language_title">Lokalisasi</string>
+    <string name="notifications_title">Notifikasi</string>
+    <string name="summary_daily_reminder">Aktifkan/matikan pegingat harian. Anda akan menerima pengingat harian pada pukul 8 pagi</string>
+    <string name="summary_release_reminder">Aktifkan/matikan pengingat film baru. Anda akan menerima pengingat harian film yang baru tayang pada pukul 7 pagi</string>
+    <string name="message_daily">Buka aplikasi untuk melihat info film terbaru</string>
+    <string name="release_movie_message">%s telah tayang hari ini!</string>
+    <string name="on_movie_release_reminder">Aktifkan pengingat harian film</string>
+    <string name="off_movie_release_reminder">Nonaktifkan pengingat harian film</string>
+    <string name="daily_reminder">Pengingat Harian</string>
+</resources>

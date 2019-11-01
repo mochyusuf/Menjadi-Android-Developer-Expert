@@ -1,8 +1,6 @@
 package mocha.yusuf.film5.Fragment;
 
-import android.arch.persistence.room.Room;
-import android.content.Context;
-import android.net.Uri;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -10,29 +8,29 @@ import android.support.v4.app.Fragment;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import mocha.yusuf.film5.Adapter.TVAdapter;
-import mocha.yusuf.film5.Database.AppDatabase;
+import mocha.yusuf.film5.Database.TVContract;
 import mocha.yusuf.film5.Model.TVModel;
 import mocha.yusuf.film5.R;
 
 public class FavoriteTV extends Fragment {
 
     public static final String DB_NAME = "favorit";
-    private static AppDatabase db;
     private TVAdapter adapter;
-    private ArrayList<TVModel> tvModels;
+    private ArrayList<TVModel> tv_Models;
 
     public static final String EXTRA_TV = "extra_tv";
     public static final String EXTRA_LANG = "extra_lang";
     public static final String TAG = "TV_TAG";
-    public static String lang = "en";
     private RecyclerView recyclerView;
 
     public FavoriteTV() {
@@ -45,31 +43,33 @@ public class FavoriteTV extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_favorite_tv, container, false);
 
-        db = Room.databaseBuilder(view.getContext(),
-                AppDatabase.class, DB_NAME).build();
-
         adapter = new TVAdapter(view.getContext());
         recyclerView = view.findViewById(R.id.recyler);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        tv_Models = new ArrayList<>();
 
-        tvModels = new ArrayList<>();
-        new FavoriteTV.getFavoriteTV().execute();
         return view;
     }
 
-    class getFavoriteTV extends AsyncTask<Void, Void, List<TVModel>> {
+    @Override
+    public void onResume() {
+        super.onResume();
 
-        @Override
-        protected List<TVModel> doInBackground(Void... voids) {
-            return db.tvDao().getTVs();
+        ArrayList<TVModel> tvModels = new ArrayList<>();
+        Cursor cursor = getActivity().getApplicationContext().getContentResolver().query(TVContract.CONTENT_URI, null,
+                null, null, null, null);
+        Objects.requireNonNull(cursor).moveToFirst();
+        if (Objects.requireNonNull(cursor).getCount() > 0) {
+            do {
+                TVModel tvModel = new TVModel(cursor);
+                tvModels.add(tvModel);
+                cursor.moveToNext();
+            } while (!cursor.isAfterLast());
         }
-
-        @Override
-        protected void onPostExecute(List<TVModel> tvModel) {
-            tvModels.addAll(tvModel);
-            recyclerView.setAdapter(adapter);
-            adapter.setTvs(tvModels);
-        }
+        tv_Models.clear();
+        tv_Models.addAll(tvModels);
+        recyclerView.setAdapter(adapter);
+        adapter.setTvs(tv_Models);
     }
 }

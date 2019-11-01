@@ -1,3 +1,40 @@
 <resources>
     <string name="app_name">favorit</string>
+
+    <string name="title">Title</string>
+    <string name="title_dummy">Lorem ipsum dolor sit amet</string>
+    <string name="name">Name</string>
+    <string name="movie">Movie</string>
+    <string name="tv">Tv Show</string>
+    <string name="release_date">Release Date</string>
+    <string name="release_date_dummy">2999-99-99</string>
+    <string name="first_air_date">First Air Date</string>
+    <string name="first_air_date_dummy">2999-99-99</string>
+    <string name="overview">Overview</string>
+    <string name="process">Process</string>
+    <string name="overview_dummy">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed eros ut metus finibus efficitur at sit amet libero. Donec convallis diam mi, id efficitur nisl vestibulum mollis. Sed ut massa facilisis massa bibendum ultrices. Suspendisse potenti. Nulla mollis luctus auctor. Donec non lacinia nisi. Nunc magna diam, faucibus vitae consequat et, fermentum a massa. Aliquam pretium scelerisque felis eget ultrices. Fusce eu accumsan turpis. Cras facilisis metus ultrices arcu posuere gravida. Sed ac ante in odio placerat porta in vel neque. Nam consectetur dolor arcu, sed pretium nulla maximus in. Maecenas tellus purus, dignissim nec dolor luctus, fermentum vehicula tortor. Sed et enim libero.</string>
+    <string name="score">Score</string>
+    <string name="score_dummy">100</string>
+    <string name="movie_title">Movie Title</string>
+    <string name="movie_description">Movie Description</string>
+    <string name="tv_title">Tv Title</string>
+    <string name="tv_description">Tv Description</string>
+    <string name="change_settings">Change Setting</string>
+    <string name="favorite">Favorite</string>
+    <string name="unfavorite">Un-Favorite</string>
+    <string name="lang">en-US</string>
+    <string name="search_hint">Search</string>
+    <string name="appwidget_text">Movie Banner</string>
+    <string name="empty_text">No Data</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="language_title">Localization</string>
+    <string name="notifications_title">Notifications</string>
+    <string name="summary_daily_reminder">Turn on/off daily reminder. You will receive daily reminder at 8AM</string>
+    <string name="summary_release_reminder">Turn on/off new movie release reminder. You will receive daily movie release info at 7AM</string>
+    <string name="message_daily">Open app to get new movies info</string>
+    <string name="release_movie_message">%s Release today!</string>
+    <string name="on_movie_release_reminder">Turn on movie release daily reminder </string>
+    <string name="off_movie_release_reminder">Turn off movie release daily reminder </string>
+    <string name="daily_reminder">Daily Reminder</string>
 </resources>

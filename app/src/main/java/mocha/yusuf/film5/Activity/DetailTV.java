@@ -1,11 +1,14 @@
 package mocha.yusuf.film5.Activity;
 
-import android.arch.persistence.room.Room;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -14,26 +17,25 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import mocha.yusuf.film5.BuildConfig;
-import mocha.yusuf.film5.Database.AppDatabase;
+import mocha.yusuf.film5.Database.TVContract;
 import mocha.yusuf.film5.Model.TVModel;
 import mocha.yusuf.film5.R;
 
 public class DetailTV extends AppCompatActivity {
 
     public static final String EXTRA_TV = "extra_tv";
+    public static final String TAG = "DetailTV_TAG";
 
     public static final String DB_NAME = "favorit";
-    private static AppDatabase db;
     private static TVModel tvModel;
+    private boolean isfavorite;
+    private String id_tv;
     private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_tv);
-
-        db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, DB_NAME).build();
 
         tvModel = getIntent().getParcelableExtra(EXTRA_TV);
 
@@ -45,6 +47,8 @@ public class DetailTV extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        this.id_tv = String.valueOf(tvModel.getId());
 
         tv_title.setText(tvModel.getName());
         Glide.with(this)
@@ -60,8 +64,19 @@ public class DetailTV extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.favorite, menu);
         this.menu = menu;
-        new checkFavoriteTV(menu).execute();
+        if (!isFavorite(this.id_tv)){
+            isfavorite = true;
+            menu.findItem(R.id.action_un_favorite).setVisible(false);
+        }else{
+            menu.findItem(R.id.action_favorite).setVisible(false);
+        }
         return true;
+    }
+
+    private boolean isFavorite(String id) {
+        Uri uri = TVContract.CONTENT_URI.buildUpon().appendPath(id).build();
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        return cursor.moveToFirst();
     }
 
     @Override
@@ -69,70 +84,36 @@ public class DetailTV extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_favorite) {
-            insertFavoriteTV();
+            isfavorite = true;
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(TVContract.TVColumns.TV_id, id);
+            contentValues.put(TVContract.TVColumns.TV_original_name, tvModel.getOriginal_name());
+            contentValues.put(TVContract.TVColumns.TV_name, tvModel.getName());
+            contentValues.put(TVContract.TVColumns.TV_popularity, tvModel.getPopularity());
+            contentValues.put(TVContract.TVColumns.TV_vote_count, tvModel.getVote_count());
+            contentValues.put(TVContract.TVColumns.TV_first_air_date, tvModel.getFirst_air_date());
+            contentValues.put(TVContract.TVColumns.TV_backdrop_path, tvModel.getBackdrop_path());
+            contentValues.put(TVContract.TVColumns.TV_original_language, tvModel.getOriginal_language());
+            contentValues.put(TVContract.TVColumns.TV_vote_average, tvModel.getVote_average());
+            contentValues.put(TVContract.TVColumns.TV_overview, tvModel.getOverview());
+            contentValues.put(TVContract.TVColumns.TV_poster_path, tvModel.getPoster_path());
+            Uri uri = getContentResolver().insert(TVContract.CONTENT_URI, contentValues);
+            if (uri != null) {
+                Log.i(TAG, "Uri " + uri);
+            }
+            menu.findItem(R.id.action_favorite).setVisible(false);
+            menu.findItem(R.id.action_un_favorite).setVisible(true);
             return true;
         }else if(id == R.id.action_un_favorite){
-            deleteFavoriteTV();
+            isfavorite = false;
+            Uri uri = TVContract.CONTENT_URI.buildUpon().appendPath(this.id_tv).build();
+            getContentResolver().delete(uri, null, null);
+            menu.findItem(R.id.action_favorite).setVisible(true);
+            menu.findItem(R.id.action_un_favorite).setVisible(false);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void insertFavoriteTV(){
-        new saveFavoriteTV().execute();
-    }
-
-    private void deleteFavoriteTV(){
-        new deleteFavoriteTV().execute();
-    }
-
-    class saveFavoriteTV extends AsyncTask<Void, Void, Long> {
-        @Override
-        protected Long doInBackground(Void... voids) {
-            return db.tvDao().insertTV(tvModel);
-        }
-
-        @Override
-        protected void onPostExecute(Long status) {
-            menu.findItem(R.id.action_favorite).setVisible(false);
-            menu.findItem(R.id.action_un_favorite).setVisible(true);
-        }
-    }
-
-    class deleteFavoriteTV extends AsyncTask<Void, Void, Integer> {
-        @Override
-        protected Integer doInBackground(Void... voids) {
-            return db.tvDao().deleteTV(tvModel);
-        }
-
-        @Override
-        protected void onPostExecute(Integer status) {
-            menu.findItem(R.id.action_favorite).setVisible(true);
-            menu.findItem(R.id.action_un_favorite).setVisible(false);
-        }
-    }
-
-    class checkFavoriteTV extends AsyncTask<Void, Void, TVModel> {
-
-        Menu menu;
-
-        checkFavoriteTV(Menu menu){
-            this.menu = menu;
-        }
-
-        @Override
-        protected TVModel doInBackground(Void... voids) {
-            return db.tvDao().checkTV(tvModel.getId());
-        }
-
-        @Override
-        protected void onPostExecute(TVModel movie) {
-            if (movie == null){
-                menu.findItem(R.id.action_un_favorite).setVisible(false);
-            }else{
-                menu.findItem(R.id.action_favorite).setVisible(false);
-            }
-        }
-    }
 }

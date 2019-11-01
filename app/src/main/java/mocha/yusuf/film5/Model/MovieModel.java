@@ -1,13 +1,17 @@
 package mocha.yusuf.film5.Model;
 
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-@Entity(tableName = "Movies")
+import mocha.yusuf.film5.Database.MovieContract;
+
+import static mocha.yusuf.film5.Database.MovieContract.getColumnDouble;
+import static mocha.yusuf.film5.Database.MovieContract.getColumnInt;
+import static mocha.yusuf.film5.Database.MovieContract.getColumnString;
+
 public class MovieModel implements Parcelable {
     @SerializedName("popularity")
     private double popularity;
@@ -18,12 +22,8 @@ public class MovieModel implements Parcelable {
     @SerializedName("poster_path")
     private String poster_path;
 
-    @PrimaryKey
     @SerializedName("id")
-    private int id;
-
-    @SerializedName("adult")
-    private boolean adult;
+    private String id;
 
     @SerializedName("backdrop_path")
     private String backdrop_path;
@@ -46,12 +46,11 @@ public class MovieModel implements Parcelable {
     @SerializedName("release_date")
     private String release_date;
 
-    public MovieModel(double popularity, int vote_count, String poster_path, int id, boolean adult, String backdrop_path, String original_language, String original_title, String title, double vote_average, String overview, String release_date) {
+    public MovieModel(double popularity, int vote_count, String poster_path, String id, String backdrop_path, String original_language, String original_title, String title, double vote_average, String overview, String release_date) {
         this.popularity = popularity;
         this.vote_count = vote_count;
         this.poster_path = poster_path;
         this.id = id;
-        this.adult = adult;
         this.backdrop_path = backdrop_path;
         this.original_language = original_language;
         this.original_title = original_title;
@@ -73,12 +72,8 @@ public class MovieModel implements Parcelable {
         return poster_path;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
-    }
-
-    public boolean isAdult() {
-        return adult;
     }
 
     public String getBackdrop_path() {
@@ -121,12 +116,8 @@ public class MovieModel implements Parcelable {
         this.poster_path = poster_path;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
-    }
-
-    public void setAdult(boolean adult) {
-        this.adult = adult;
     }
 
     public void setBackdrop_path(String backdrop_path) {
@@ -167,8 +158,7 @@ public class MovieModel implements Parcelable {
         dest.writeDouble(this.popularity);
         dest.writeInt(this.vote_count);
         dest.writeString(this.poster_path);
-        dest.writeInt(this.id);
-        dest.writeByte(this.adult ? (byte) 1 : (byte) 0);
+        dest.writeString(this.id);
         dest.writeString(this.backdrop_path);
         dest.writeString(this.original_language);
         dest.writeString(this.original_title);
@@ -178,12 +168,11 @@ public class MovieModel implements Parcelable {
         dest.writeString(this.release_date);
     }
 
-    protected MovieModel(Parcel in) {
+    public MovieModel(Parcel in) {
         this.popularity = in.readDouble();
         this.vote_count = in.readInt();
         this.poster_path = in.readString();
-        this.id = in.readInt();
-        this.adult = in.readByte() != 0;
+        this.id = in.readString();
         this.backdrop_path = in.readString();
         this.original_language = in.readString();
         this.original_title = in.readString();
@@ -204,4 +193,19 @@ public class MovieModel implements Parcelable {
             return new MovieModel[size];
         }
     };
+
+    public MovieModel (Cursor cursor) {
+        this.id = getColumnString(cursor, MovieContract.MovieColumns.MOVIE_id);
+        this.title = getColumnString(cursor, MovieContract.MovieColumns.MOVIE_title);
+        this.popularity = getColumnDouble(cursor, MovieContract.MovieColumns.MOVIE_popularity);
+        this.vote_count = getColumnInt(cursor, MovieContract.MovieColumns.MOVIE_vote_count);
+        this.poster_path = getColumnString(cursor, MovieContract.MovieColumns.MOVIE_poster_path);
+        this.backdrop_path = getColumnString(cursor, MovieContract.MovieColumns.MOVIE_backdrop_path);
+        this.original_language = getColumnString(cursor, MovieContract.MovieColumns.MOVIE_original_language);
+        this.original_title = getColumnString(cursor, MovieContract.MovieColumns.MOVIE_original_title);
+        this.vote_average = getColumnDouble(cursor, MovieContract.MovieColumns.MOVIE_vote_average);
+        this.overview = getColumnString(cursor, MovieContract.MovieColumns.MOVIE_overview);
+        this.release_date = getColumnString(cursor, MovieContract.MovieColumns.MOVIE_release_date);
+
+    }
 }

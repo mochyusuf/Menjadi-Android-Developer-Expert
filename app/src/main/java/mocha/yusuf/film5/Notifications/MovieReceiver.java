@@ -87,7 +87,6 @@ public class MovieReceiver extends BroadcastReceiver {
         if (notificationManager != null) {
             notificationManager.notify(id, builder.build());
         }
-        Log.i(TAG, "sendNotification: ");
     }
 
     public void setAlarm(Context context, String type, String time, String message) {
