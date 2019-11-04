@@ -1,6 +1,7 @@
 package mocha.yusuf.film5.Notifications;
 
 import android.app.AlarmManager;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -8,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
@@ -24,6 +26,8 @@ public class DailyReceiver extends BroadcastReceiver {
     public static final String EXTRA_MESSAGE_PREF = "my_message";
     public static final String EXTRA_TYPE_PREF = "my_type";
     public static final String TAG = "DailyReceiver_TAG";
+    private static final String CHANNEL_ID = "Channel_Daily";
+    private static final String CHANNEL_NAME = "Daily channel";
     public DailyReceiver() {
 
     }
@@ -49,6 +53,21 @@ public class DailyReceiver extends BroadcastReceiver {
                 .setColor(ContextCompat.getColor(context, android.R.color.transparent))
                 .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
                 .setSound(uriTone);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
+                    CHANNEL_NAME,
+                    NotificationManager.IMPORTANCE_DEFAULT);
+
+            channel.enableVibration(true);
+            channel.setVibrationPattern(new long[]{1000, 1000, 1000, 1000, 1000});
+
+            builder.setChannelId(CHANNEL_ID);
+
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
+            }
+        }
         if (notificationManager != null) {
             notificationManager.notify(id, builder.build());
         }
@@ -67,17 +86,20 @@ public class DailyReceiver extends BroadcastReceiver {
         calendar.set(Calendar.SECOND,0);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,NOTIFICATION_ID,intent,0);
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
 
-//        Toast.makeText(context, R.string.on_movie_release_reminder, Toast.LENGTH_SHORT).show();
+        if (alarmManager != null) {
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        }
     }
 
     public void cancelAlarm(Context context){
-        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context,DailyReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,NOTIFICATION_ID,intent,0);
-        alarmManager.cancel(pendingIntent);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, DailyReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, NOTIFICATION_ID, intent, 0);
+        pendingIntent.cancel();
 
-//        Toast.makeText(context, R.string.off_movie_release_reminder, Toast.LENGTH_SHORT).show();
+        if (alarmManager != null) {
+            alarmManager.cancel(pendingIntent);
+        }
     }
 }

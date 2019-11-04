@@ -1,6 +1,7 @@
 package mocha.yusuf.film5.Notifications;
 
 import android.app.AlarmManager;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -8,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -37,6 +39,8 @@ public class MovieReceiver extends BroadcastReceiver {
     public static final String EXTRA_TYPE_RECIEVE = "my_typeRelease";
     public final static int NOTIFICATION_ID_MOVIE = 602;
     public static final String TAG = "MovieReceiver_TAG";
+    private static final String CHANNEL_ID = "Channel_Movie";
+    private static final String CHANNEL_NAME = "Movie channel";
 
     public MovieReceiver() {
 
@@ -53,7 +57,6 @@ public class MovieReceiver extends BroadcastReceiver {
             @Override
             public void onResponse(Call<ListMovieModel> call, Response<ListMovieModel> response) {
                 List<MovieModel> items = response.body().getResults();
-//                int index = new Random().nextInt(items.size());
                 int notifId = 603;
                 for (int i = 0;i<items.size();i++){
                     String title = items.get(i).getTitle();
@@ -84,6 +87,22 @@ public class MovieReceiver extends BroadcastReceiver {
                 .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
                 .setAutoCancel(true)
                 .setSound(uriTone);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
+                    CHANNEL_NAME,
+                    NotificationManager.IMPORTANCE_DEFAULT);
+
+            channel.enableVibration(true);
+            channel.setVibrationPattern(new long[]{1000, 1000, 1000, 1000, 1000});
+
+            builder.setChannelId(CHANNEL_ID);
+
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
+            }
+        }
+
         if (notificationManager != null) {
             notificationManager.notify(id, builder.build());
         }
@@ -101,19 +120,19 @@ public class MovieReceiver extends BroadcastReceiver {
         calendar.set(Calendar.MINUTE, Integer.parseInt(timeArray[1]));
         calendar.set(Calendar.SECOND, 0);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, NOTIFICATION_ID_MOVIE, intent, 0);
+
+        if (alarmManager != null) {
             alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-
-//        Toast.makeText(context, R.string.on_movie_release_reminder, Toast.LENGTH_SHORT).show();
+        }
     }
-
 
     public void cancelAlarm(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, MovieReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, NOTIFICATION_ID_MOVIE, intent, 0);
-//        if (alarmManager != null) {
+
+        if (alarmManager != null) {
             alarmManager.cancel(pendingIntent);
-//        }
-//        Toast.makeText(context, R.string.off_movie_release_reminder, Toast.LENGTH_SHORT).show();
+        }
     }
 }
